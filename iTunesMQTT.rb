@@ -44,7 +44,7 @@ MQTT::Client.connect(SERVER) do |c|
         volume = message
       end
       puts "Change volume to %i" % volume
-      `osascript -e 'tell application "iTunes" to set sound volume to #{volume}'`.to_i
+      `osascript -e 'tell application "iTunes" to set sound volume to #{volume.to_i}'`
     end
     if topic.end_with?('/play')
       itunes('play track "%s"' % message)
