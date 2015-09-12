@@ -17,7 +17,6 @@ def itunes(message)
   return `osascript -e 'tell application "iTunes"' -e '#{message}' -e 'end tell'`
 end
 
-puts BASE + '/control'
 # Subscribe example
 MQTT::Client.connect(SERVER) do |c|
   c.subscribe(%w(control play search current volume).collect{|t| [BASE, t].join('/')})
@@ -33,7 +32,6 @@ MQTT::Client.connect(SERVER) do |c|
         itunes(message)
       end
     end
-    puts topic.end_with?('volume')
     if topic.end_with?('/volume')
       volume = `osascript -e 'tell application "iTunes" to sound volume as integer'`.to_i
       if message == 'up'
