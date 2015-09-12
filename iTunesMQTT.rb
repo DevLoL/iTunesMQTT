@@ -4,7 +4,7 @@ require 'mqtt'
 
 SERVER = '192.168.8.2'
 BASE = 'devlol/h19/tomk32/music'
-VERSION = 0.3
+VERSION = 0.3.1
 
 MQTT::Client.connect(SERVER) do |c|
   c.publish(BASE + '/status', 'v%s active' % VERSION)
@@ -15,6 +15,26 @@ def itunes(message)
   message.gsub!(/'/, "\\'")
   puts "osascript -e 'tell application \"iTunes\"' -e '#{message}' -e 'end tell'"
   return `osascript -e 'tell application "iTunes"' -e '#{message}' -e 'end tell'`
+end
+
+def current_track
+  artist = itunes("get artist of current track")
+  track = itunes("get name of current track")
+  return 'Playing %s - %s' % [artist, track]
+end
+
+# Check the current track every 5 seconds and publish a message if it has changed
+Thread.new do
+  last_track = nil
+  while true do
+    if last_track != (tmp = current_track())
+      last_track = tmp
+      MQTT::Client.connect(SERVER) do |c|
+        c.publish(BASE + '/playing', last_track)
+      end
+    end
+    sleep 5
+  end
 end
 
 # Subscribe example
@@ -48,9 +68,7 @@ MQTT::Client.connect(SERVER) do |c|
       itunes('play track "%s"' % message)
     end
     if topic.end_with?('/current')
-      artist = itunes("get artist of current track")
-      track = itunes("get name of current track")
-      c.publish(BASE + '/playing', 'Playing %s - %s' % [artist, track])
+      c.publish(BASE + '/playing', current_track())
     end
   end
 end

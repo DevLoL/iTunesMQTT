@@ -6,9 +6,9 @@ Installation:
 
 Copy iTunesMQTT.rb into you bin directory and run whenever you want to loose control over your iTunes.
 You will have ot change the SERVER and BASE variables in the ruby file to match your mqtt server.
+Additonally to control it will also check the current song every 3 seconds and publish when a new song is playing
 
-
-Current Features:
+Commands supported
 
   BASE/control pause
   /control toggle
@@ -23,4 +23,12 @@ Current Features:
 
   /current
     will send the current artist and track to BASE/playing
+
+Output only paths:
+
+  BASE/playing
+    output for /current and the automatic updater
+
+  BASE/status
+    outputs the version on startup
 
