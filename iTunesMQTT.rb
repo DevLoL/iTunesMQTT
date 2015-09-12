@@ -20,7 +20,7 @@ end
 def current_track
   artist = itunes("get artist of current track")
   track = itunes("get name of current track")
-  return 'Playing %s - %s' % [artist, track]
+  return '%s - %s' % [artist, track]
 end
 
 # Check the current track every 5 seconds and publish a message if it has changed
