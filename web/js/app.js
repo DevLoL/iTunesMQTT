@@ -3,6 +3,7 @@ var reconnectTimeout = 2000;
 var host = "158.255.212.248";
 var port = 8080;
 var base = "devlol/h19/tomk32/music/";
+var slider;
 
 function control(cmd) {
     mqtt.send(base + "control", cmd);
@@ -33,6 +34,14 @@ function MQTTconnect() {
 function onConnect() {
     console.log('Connected to ' + host + ':' + port);
     mqtt.subscribe(base + "#", {qos: 0});
+    slider = new Slider("#volume", {
+        formatter: function(value) {
+            return value;
+        }
+    });
+    slider.on("slideStop", function(val){
+        mqtt.send(base + "volume", String(val));
+    });
 }
 
 function onConnectionLost(response) {
@@ -56,9 +65,12 @@ function onMessageArrived(message) {
     }
 };
 
+function setup() {
+    MQTTconnect();
+}
 
 window.onload = function() {
     console.log("booting up");
-    MQTTconnect();
+    setup();
 };
 
