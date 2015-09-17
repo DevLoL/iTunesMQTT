@@ -12,6 +12,10 @@ You will have to change the `SERVER` and` BASE` variables in the ruby file to ma
 
 Besides controls, it also output the trackinfo when a new song starts playing.
 
+## Webinterface
+
+This version also ships with a small webinterface for conveniently remote control your iTunes, which looks like [this](http://doebi.at/music)
+
 ## Commands supported
 
     BASE/control pause
