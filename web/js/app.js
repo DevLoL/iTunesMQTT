@@ -60,6 +60,12 @@ function onMessageArrived(message) {
         case base + 'playing':
             document.getElementById("playing").innerHTML = payload;            
             break;
+        case base + 'volume':
+            slider.setValue(Number(payload));
+            break;
+        case base + 'status':
+            console.log("status: " + payload);
+            break;
         default:
             break;
     }
